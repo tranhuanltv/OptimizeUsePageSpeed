@@ -1,12 +1,14 @@
+#include <stdlib.h> // system
 #include "DirectoryTool.h"
 #include "FileUtil.h"
-#include <process.h>
 
 #define SPACECHAR ' '
+#define EXIT_FAILURE 1
+#define EXIT_SUCCESS 0
 
 void PrintUsage()
 {
-	printf("Usage: app input_dir output_dir");
+	printf("Usage: app input_dir output_dir\n");
 }
 
 std::string quote(const std::string &val)
