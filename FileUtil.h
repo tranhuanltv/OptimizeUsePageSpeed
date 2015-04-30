@@ -25,15 +25,27 @@ void ListFilesInFolder(const string& fileExtension, const string& folderPath, ve
 		dirent *entry;
 		while((entry = readdir(dir)) != 0)
 		{
+            
 			string fileName(entry->d_name);
-			string dotExtension = "." + fileExtension;
+            
+            if (fileName == ".." || fileName == ".")
+                continue;
+			
+            string fullPath = folderPath + SLASH_STRING + fileName;
+            if (entry->d_type == DT_DIR)
+            {
+                ListFilesInFolder(fileExtension, fullPath, vFileNames);
+                continue;
+            }
+            
+            string dotExtension = "." + fileExtension;
 			size_t extPosition = fileName.rfind(dotExtension);
 			if (extPosition != string::npos)
 			{
 				string extString = fileName.substr(extPosition);
 				if (extString == dotExtension)
 				{
-					vFileNames->push_back(fileName);
+					vFileNames->push_back(fullPath);
 				}
 			}
 		}
@@ -77,4 +89,17 @@ string GetFileName(const string& filePath)
 	{
 		return filePath;
 	}
+}
+
+string GetFilePath(const string& fullFilePath)
+{
+    size_t lastPos = fullFilePath.rfind(SLASH_STRING);
+    if (lastPos != string::npos)
+    {
+        return fullFilePath.substr(0, lastPos);
+    }
+    else
+    {
+        return fullFilePath;
+    }
 }

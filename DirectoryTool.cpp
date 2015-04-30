@@ -6,6 +6,7 @@
 #else
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <errno.h>
 #define SLASH_CHAR '/'
 #endif // _WIN32
 
@@ -17,12 +18,17 @@ DirectoryTool::~DirectoryTool(void)
 {
 }
 
-void DirectoryTool::createDir( const std::string& dir_name )
+bool DirectoryTool::createDir( const std::string& dir_name )
 {
 #ifdef _WIN32
-	CreateDirectoryA(dir_name.c_str(), NULL);
+	return CreateDirectoryA(dir_name.c_str(), NULL);
 #else
-	mkdir(dir_name.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
+    //printf("Create dir: %s\n", dir_name.c_str());
+	int ret = mkdir(dir_name.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
+    if (errno == EEXIST)
+        return true;
+    
+    return ret == 0;
 #endif // _WIN32
 }
 
