@@ -51,7 +51,7 @@ void optimize(int type, const char* input_dir, const char *out_dir)
 	{
 		for (int i = 0; i < cssFiles.size(); ++i)
 		{
-			const char * optimizeCssTool = kTypeInfo[type].execution;
+			const char * optimizeTool = kTypeInfo[type].execution;
             
             string outFile = replace(cssFiles.at(i), input_dir, out_dir);
             
@@ -64,7 +64,7 @@ void optimize(int type, const char* input_dir, const char *out_dir)
                 output_indicate = "-output_file ";
             }
             
-			std::string cssCommand = string(optimizeCssTool)
+			std::string cssCommand = string(optimizeTool)
 				+ SPACECHAR
                 + input_indicate
 				+ quote(cssFiles.at(i)) 
