@@ -30,6 +30,7 @@
 		781ABCE71AF07F2800BB1956 /* dirent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dirent.h; sourceTree = SOURCE_ROOT; };
 		781ABCE81AF07F2800BB1956 /* FileUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileUtil.h; sourceTree = SOURCE_ROOT; };
 		781ABCE91AF07F2800BB1956 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = SOURCE_ROOT; };
+		783568831AFBA63700D98938 /* StringUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StringUtil.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +68,7 @@
 				781ABCE71AF07F2800BB1956 /* dirent.h */,
 				781ABCE81AF07F2800BB1956 /* FileUtil.h */,
 				781ABCE91AF07F2800BB1956 /* main.cpp */,
+				783568831AFBA63700D98938 /* StringUtil.h */,
 			);
 			path = PageSpeedOptimize;
 			sourceTree = "<group>";

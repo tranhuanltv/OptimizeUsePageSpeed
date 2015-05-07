@@ -1,4 +1,5 @@
 #include "DirectoryTool.h"
+#include "StringUtil.h"
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -18,7 +19,7 @@ DirectoryTool::~DirectoryTool(void)
 {
 }
 
-bool DirectoryTool::createDir( const std::string& dir_name )
+bool DirectoryTool::createDir(const string& dir_name)
 {
 #ifdef _WIN32
 	return CreateDirectoryA(dir_name.c_str(), NULL);
@@ -30,6 +31,18 @@ bool DirectoryTool::createDir( const std::string& dir_name )
     
     return ret == 0;
 #endif // _WIN32
+}
+
+bool DirectoryTool::createDirs(const vector<string>& dirs, const string& fromDir, const string& toDir)
+{
+    for (int i = 0; i < dirs.size(); ++i)
+    {
+        string dir = StringUtil::replace(dirs.at(i), fromDir, toDir);
+        if (!createDir(dir))
+            return false;
+    }
+    
+    return true;
 }
 
 void DirectoryTool::createDirTree( const std::string& full_path )

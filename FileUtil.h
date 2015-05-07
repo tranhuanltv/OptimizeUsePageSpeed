@@ -1,11 +1,6 @@
 #include <string>
 #include <vector>
 
-using std::string;
-using std::vector;
-
-
-
 #if !defined(_WIN32)
 #include <unistd.h>
 #include <sys/types.h>
@@ -17,40 +12,53 @@ using std::vector;
 #define SLASH_STRING '\\'
 #endif
 
-void ListFilesInFolder(const string& fileExtension, const string& folderPath, vector<string>* vFileNames)
+using std::string;
+using std::vector;
+
+void ListFilesInFolder(const string& fileExtension
+                       , const string& folderPath
+                       , vector<string>* vFileNames
+                       , vector<string>* vFolderStructures)
 {
 	DIR *dir = opendir(folderPath.c_str());
-	if(0 != dir)
-	{
-		dirent *entry;
-		while((entry = readdir(dir)) != 0)
-		{
-            
-			string fileName(entry->d_name);
-            
-            if (fileName == ".." || fileName == ".")
-                continue;
-			
-            string fullPath = folderPath + SLASH_STRING + fileName;
-            if (entry->d_type == DT_DIR)
+	if(0 == dir)
+    {
+        printf("Cannot access %s\n", folderPath.c_str());
+        return;
+    }
+    
+    vFolderStructures->push_back(folderPath);
+    
+    printf("Folder path: %s\n", folderPath.c_str());
+    
+    dirent *entry;
+    while((entry = readdir(dir)) != 0)
+    {
+        
+        string fileName(entry->d_name);
+        
+        if (fileName == ".." || fileName == ".")
+            continue;
+        
+        string fullPath = folderPath + SLASH_STRING + fileName;
+        if (entry->d_type == DT_DIR)
+        {
+            ListFilesInFolder(fileExtension, fullPath, vFileNames, vFolderStructures);
+            continue;
+        }
+        
+        string dotExtension = "." + fileExtension;
+        size_t extPosition = fileName.rfind(dotExtension);
+        if (extPosition != string::npos)
+        {
+            string extString = fileName.substr(extPosition);
+            if (extString == dotExtension)
             {
-                ListFilesInFolder(fileExtension, fullPath, vFileNames);
-                continue;
+                vFileNames->push_back(fullPath);
             }
-            
-            string dotExtension = "." + fileExtension;
-			size_t extPosition = fileName.rfind(dotExtension);
-			if (extPosition != string::npos)
-			{
-				string extString = fileName.substr(extPosition);
-				if (extString == dotExtension)
-				{
-					vFileNames->push_back(fullPath);
-				}
-			}
-		}
-		closedir(dir);
-	}
+        }
+    }
+    closedir(dir);
 }
 
 bool WriteBin(const string& fileName, const void* src, size_t srcLen)
