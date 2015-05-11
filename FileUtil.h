@@ -29,7 +29,7 @@ void ListFilesInFolder(const string& fileExtension
     
     vFolderStructures->push_back(folderPath);
     
-    printf("Folder path: %s\n", folderPath.c_str());
+    //printf("Folder path: %s\n", folderPath.c_str());
     
     dirent *entry;
     while((entry = readdir(dir)) != 0)
@@ -41,7 +41,12 @@ void ListFilesInFolder(const string& fileExtension
             continue;
         
         string fullPath = folderPath + SLASH_STRING + fileName;
+
+#ifdef _WIN32
+		if (entry->data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+#else
         if (entry->d_type == DT_DIR)
+#endif
         {
             ListFilesInFolder(fileExtension, fullPath, vFileNames, vFolderStructures);
             continue;

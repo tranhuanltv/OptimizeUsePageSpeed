@@ -22,7 +22,10 @@ DirectoryTool::~DirectoryTool(void)
 bool DirectoryTool::createDir(const string& dir_name)
 {
 #ifdef _WIN32
-	return CreateDirectoryA(dir_name.c_str(), NULL);
+	bool ret = CreateDirectoryA(dir_name.c_str(), NULL);
+	if (GetLastError() == ERROR_ALREADY_EXISTS)
+		return true;
+	return ret;
 #else
     //printf("Create dir: %s\n", dir_name.c_str());
 	int ret = mkdir(dir_name.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
@@ -39,7 +42,10 @@ bool DirectoryTool::createDirs(const vector<string>& dirs, const string& fromDir
     {
         string dir = StringUtil::replace(dirs.at(i), fromDir, toDir);
         if (!createDir(dir))
+		{
+			printf("Failed create: %s\n", dir.c_str());
             return false;
+		}
     }
     
     return true;

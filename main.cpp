@@ -7,6 +7,12 @@
 #define EXIT_FAILURE 1
 #define EXIT_SUCCESS 0
 
+#ifdef _WIN32
+	#define CUR_DIR
+#else
+	#define CUR_DIR './'
+#endif
+
 void PrintUsage()
 {
 	printf("Usage: app input_dir output_dir\n");
@@ -26,10 +32,10 @@ struct ScanInfo
 //const int NUMBER_FILE_TYPE = 2;
 ScanInfo kTypeInfo[] =
 { 
-	{"css", "./minify_css_bin"},
-	{"js", "./minify_js_bin"},
-    {"png", "./optimize_image_bin"},
-    {"jpg", "./optimize_image_bin"}
+	{"css", CUR_DIR"minify_css_bin"},
+	{"js", CUR_DIR"minify_js_bin"},
+    {"png", CUR_DIR"optimize_image_bin"},
+    {"jpg", CUR_DIR"optimize_image_bin"}
 };
 
 void optimize(int type, const char* input_dir, const char *out_dir) 
@@ -42,8 +48,11 @@ void optimize(int type, const char* input_dir, const char *out_dir)
     if (files.empty()) return;
     
     // Create output directories for store result files
-    if (!DirectoryTool::createDirs(folders, input_dir, out_dir))
+	static bool hasCreatedDirs = false;
+    if (!hasCreatedDirs && !DirectoryTool::createDirs(folders, input_dir, out_dir))
         return;
+
+	hasCreatedDirs = true;
 	
     std::vector<std::string>::iterator iter = files.begin();
     for ( ; iter != files.end(); ++iter)
