@@ -6,4 +6,4 @@ Precompile pagespeed apps:
 
 Window: https://www.dropbox.com/s/xd34ibrgrb0fs83/page_speed_apps_win32.zip?dl=0
 
-Mac OSX: 
+Mac OSX: https://www.dropbox.com/s/o0nechtxbbcd13q/pagespeed_apps_macos.zip?dl=0
